@@ -13,10 +13,9 @@ def get_file_list():
     return file_list
 
 def download_data(download_dir:str = "downloads/"):
-    # Verifica se existe diretório de daowload padrão
-    if download_dir == "downloads/":
-        if not os.path.exists(download_dir):
-            os.system("mkdir downloads")
+    # Cria diretprio de saida caso não exista
+    if not os.path.exists(download_dir):
+        os.system("mkdir downloads")
 
     repositorio = "https://repositorio.dados.gov.br/seges/detru/"
     
@@ -38,9 +37,10 @@ def download_data(download_dir:str = "downloads/"):
         wget.download(repositorio + file_name, arquivo_zip)
         
         # Extraindo o arquivo
-        zf = ZipFile(arquivo_zip, 'r')
-        zf.extractall(download_dir)
-        zf.close()
+        if arquivo_zip.endswith('.zip'):
+            zf = ZipFile(arquivo_zip, 'r')
+            zf.extractall(download_dir)
+            zf.close()
 
         # Excluindo arquivo zip
         os.system("rm " + arquivo_zip) 
